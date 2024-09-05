@@ -1,7 +1,7 @@
 {
-  "name": "scrunch",
+  "name": "scrunchjs",
   "version": "1.0.0",
-  "description": "An intelligent image resizer",
+  "description": "An extremely efficient image resizer",
   "main": "index.js",
   "scripts": {
     "test": "node tests/script.js"

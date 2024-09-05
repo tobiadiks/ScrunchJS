@@ -1,6 +1,6 @@
 # Scrunch
 
-Scrunch is an intelligent image resizer that compresses images to meet specified size and quality constraints.
+Scrunch is an extremely efficient image resizer that compresses images to meet specified size and quality constraints.
 
 ## Table of Contents
 
