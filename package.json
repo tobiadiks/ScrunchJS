@@ -1,0 +1,28 @@
+{
+  "name": "scrunch",
+  "version": "1.0.0",
+  "description": "An intelligent image resizer",
+  "main": "index.js",
+  "scripts": {
+    "test": "node tests/script.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tobiadiks/scrunch.git"
+  },
+  "keywords": [
+    "image",
+    "resizer",
+    "compression",
+    "size"
+  ],
+  "author": "Adeleke Oluwatobi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tobiadiks/scrunch/issues"
+  },
+  "homepage": "https://github.com/tobiadiks/scrunch#readme",
+  "dependencies": {
+    "sharp": "^0.33.5"
+  }
+}
