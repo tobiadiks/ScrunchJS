@@ -1,6 +1,6 @@
-# Scrunch
+# ScrunchJs
 
-Scrunch is an extremely efficient image resizer that compresses images to meet specified size and quality constraints.
+ScrunchJs is an extremely efficient image resizer that compresses images to meet specified size and quality constraints.
 
 ## Table of Contents
 
@@ -17,7 +17,7 @@ Scrunch is an extremely efficient image resizer that compresses images to meet s
 ## Installation
 
 ```bash
-npm install scrunch --save
+npm install scrunchjs --save
 ```
 
 ## Usage
@@ -25,7 +25,7 @@ npm install scrunch --save
 ### Node.js Usage
 
 ```javascript
-const { compressImage } = require('scrunch');
+const { compressImage } = require('scrunchjs');
 
 const inputBuffer = await fs.readFile('./images/input.png');
 const compressedBuffer = await compressImage({
@@ -41,7 +41,7 @@ const compressedBuffer = await compressImage({
 
 ```javascript
 import React, { useState } from 'react';
-import { compressImage } from 'scrunch';
+import { compressImage } from 'scrunchjs';
 
 const ImageUploader = () => {
   const [image, setImage] = useState(null);
@@ -105,7 +105,7 @@ Compresses an image based on the provided options.
 ### Basic Usage
 
 ```javascript
-const { compressImage } = require('scrunch');
+const { compressImage } = require('scrunchjs');
 
 const inputBuffer = await fs.readFile('./images/input.png');
 const compressedBuffer = await compressImage({
@@ -121,7 +121,7 @@ const compressedBuffer = await compressImage({
 
 ```javascript
 import React, { useState } from 'react';
-import { compressImage } from 'scrunch';
+import { compressImage } from 'scrunchjs';
 
 const ImageUploader = () => {
   const [image, setImage] = useState(null);
