@@ -62,5 +62,10 @@ const compressImageClient = async ({
     return compressedBlob;
 };
 
-module.exports = compressImageClient;
+// ES Module export
+export { compressImageClient };
 
+// CommonJS export
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { compressImageClient };
+}

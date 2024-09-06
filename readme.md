@@ -25,7 +25,8 @@ npm install scrunchjs --save
 ### Server-side Usage
 
 ```javascript
-const compressImageServer = require('scrunchjs');
+import {compressImageServer}  from 'scrunchjs/server';
+
 
 const inputBuffer = await fs.readFile('./images/input.png');
 const compressedBuffer = await compressImageServer({
@@ -41,7 +42,7 @@ const compressedBuffer = await compressImageServer({
 
 ```javascript
 import React, { useState } from 'react';
-import compressImageClient from 'scrunchjs';
+import {compressImageClient} from 'scrunchjs/client';
 
 const ImageUploader = () => {
   const [image, setImage] = useState(null);
@@ -86,10 +87,10 @@ Note: When using Next.js, you can create an API route to handle the image compre
 
 ```javascript
 import { NextResponse } from 'next/server';
-import compressImageServer from 'scrunchjs';
+import {compressImageServer} from 'scrunchjs/server';
 
 export async function POST(req, res) {
-  if (req.method === 'POST') {
+  
     try {
       const buffer = Buffer.from(await req.arrayBuffer());
       const compressedBuffer = await compressImageServer({
@@ -103,7 +104,7 @@ export async function POST(req, res) {
       return new Response(compressedBuffer, {
         status: 200,
         headers: {
-          'Content-Type': 'image/png',
+          'Content-Type': 'image/jpeg',
           'Content-Length': compressedBuffer.length.toString(),
         },
       });
@@ -111,9 +112,6 @@ export async function POST(req, res) {
       console.error(error);
       return NextResponse.json({ message: 'Error compressing image' });
     }
-  } else {
-    return NextResponse.json({ message: 'Method not allowed' });
-  }
 };
 ```
 
@@ -135,9 +133,9 @@ const ImageUploader = () => {
     if (!image) return;
 
     try {
-      const response = await fetch('/api/image', {
+      const response = await fetch('/api/compress-image', {
         headers: {
-          'Content-Type': 'image/png',
+          'Content-Type': 'image/jpeg',
         },  
         method: 'POST',
         body: image
@@ -169,11 +167,11 @@ const ImageUploader = () => {
 
 ## API Reference
 
-### `compressImageClient(options)`
+### `compressImage(options)`
 
 Compresses an image based on the provided options.
 
-#### Client-side Parameters
+#### Parameters
 
 - `options`: Object
   - `input`: Buffer | File | Blob | string
@@ -188,28 +186,6 @@ Compresses an image based on the provided options.
     - The maximum file size in bytes for the compressed image.
 
 #### Client-side Returns
-
-- `Buffer`: The compressed image buffer.
-
-### `compressImageServer(options)`
-
-Compresses an image based on the provided options.
-
-#### Server-side Parameters
-
-- `options`: Object 
-  - `input`: Buffer | File | Blob | string
-    - The image to compress.
-  - `maxWidth`: number
-    - The maximum width for the compressed image.
-  - `initialQuality`: number
-    - The initial quality setting for the image compression.
-  - `minQuality`: number
-    - The minimum quality setting for the image compression.  
-  - `maxFileSize`: number
-    - The maximum file size in bytes for the compressed image.
-
-#### Server-side Returns
 
 - `Buffer`: The compressed image buffer.
 

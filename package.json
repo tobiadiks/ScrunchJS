@@ -1,6 +1,6 @@
 {
   "name": "scrunchjs",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.5",
   "description": "An extremely efficient image resizer",
   "main": "index.js",
   "scripts": {
@@ -25,9 +25,12 @@
   "dependencies": {
     "sharp": "^0.33.5"
   },
-  "exports": {
-    "browser": "./client.js",
-    "node": "./server.js",
-    "default": "./index.js"
+ "exports": {
+    ".": {
+      "import": "./index.js",
+      "require": "./index.js"
+    },
+    "./server": "./server.cjs",
+    "./client": "./client.js"
   }
 }
