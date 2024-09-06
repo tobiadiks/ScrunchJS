@@ -42,12 +42,12 @@ const compressImageClient = async ({
   // Load image
   const img = await createImageBitmap(input);
 
-  let quality = initialQuality;
+  let quality = initialQuality / 100;
   let compressedBlob = await compressImageHelper(img, quality);
 
   // Gradually reduce quality until file size is acceptable or min quality is reached
-  while (compressedBlob.size > maxFileSize && quality > minQuality) {
-    quality = Math.max(quality - 10, minQuality);
+  while (compressedBlob.size > maxFileSize && quality > minQuality / 100) {
+    quality = Math.max(quality - 0.1, minQuality / 100);
     compressedBlob = await compressImageHelper(img, quality);
   }
 
