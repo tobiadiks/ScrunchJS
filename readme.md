@@ -1,14 +1,15 @@
 # ScrunchJs
 
-ScrunchJs is an extremely efficient image resizer that compresses images to meet specified size and quality constraints.
+ScrunchJs is an extremely efficient image resizer that compresses images to meet specified size and quality constraints. It provides both client-side and server-side compression capabilities.
 
 ## Table of Contents
 
 - [Installation](#installation)
 - [Usage](#usage)
-  - [Node.js Usage](#nodejs-usage)
-  - [React Usage](#react-usage)
+  - [Client-side Usage](#client-side-usage)
+  - [Server-side Usage](#server-side-usage)
   - [Next.js Usage](#nextjs-usage)
+- [API Reference](#api-reference)
 - [Testing](#testing)
 - [Contributing](#contributing)
 - [License](#license)
@@ -21,13 +22,13 @@ npm install scrunchjs --save
 
 ## Usage
 
-### Node.js Usage
+### Server-side Usage
 
 ```javascript
-const compressImage = require('scrunchjs');
+const { compressImageServer } = require('scrunchjs');
 
 const inputBuffer = await fs.readFile('./images/input.png');
-const compressedBuffer = await compressImage({
+const compressedBuffer = await compressImageServer({
   input: inputBuffer,
   maxWidth: 1920,
   initialQuality: 70,
@@ -36,11 +37,11 @@ const compressedBuffer = await compressImage({
 });
 ```
 
-### React Usage
+### Client-side Usage
 
 ```javascript
 import React, { useState } from 'react';
-import compressImage from 'scrunchjs';
+import { compressImageClient } from 'scrunchjs';
 
 const ImageUploader = () => {
   const [image, setImage] = useState(null);
@@ -54,7 +55,7 @@ const ImageUploader = () => {
   const handleUpload = async () => {
     if (!image) return;
 
-    const compressedBuffer = await compressImage({
+    const compressedBuffer = await compressImageClient({
       input: image,
       maxWidth: 1920,
       initialQuality: 70,
@@ -63,7 +64,7 @@ const ImageUploader = () => {
     });
 
     setCompressedImage(compressedBuffer);
-    };
+  };
 
   return (
     <div>
@@ -77,19 +78,18 @@ const ImageUploader = () => {
 
 ### Next.js Usage
 
-When using ScrunchJs with Next.js, you need to create a server-side API route to handle the image compression.
-
 1. Create an API route for image compression (e.g., `pages/api/compress-image.js` or `app/api/compress-image/route.js` for App Router):
+Note: When using Next.js, you can create an API route to handle the image compression using the `compressImageServer` function or `compressImageClient` function for client-side compression.
 
 ```javascript
 import { NextResponse } from 'next/server';
-import  compressImage  from 'scrunchjs';
+import { compressImageServer } from 'scrunchjs';
 
 export async function POST(req, res) {
   if (req.method === 'POST') {
     try {
       const buffer = Buffer.from(await req.arrayBuffer());
-      const compressedBuffer = await compressImage({
+      const compressedBuffer = await compressImageServer({
         input: buffer,
         maxWidth: 1920,
         initialQuality: 70,
@@ -166,11 +166,11 @@ const ImageUploader = () => {
 
 ## API Reference
 
-### `compressImage(options)`
+### `compressImageClient(options)`
 
 Compresses an image based on the provided options.
 
-#### Parameters
+#### Client-side Parameters
 
 - `options`: Object
   - `input`: Buffer | File | Blob | string
@@ -184,7 +184,29 @@ Compresses an image based on the provided options.
   - `maxFileSize`: number
     - The maximum file size in bytes for the compressed image.
 
-#### Returns
+#### Client-side Returns
+
+- `Buffer`: The compressed image buffer.
+
+### `compressImageServer(options)`
+
+Compresses an image based on the provided options.
+
+#### Server-side Parameters
+
+- `options`: Object 
+  - `input`: Buffer | File | Blob | string
+    - The image to compress.
+  - `maxWidth`: number
+    - The maximum width for the compressed image.
+  - `initialQuality`: number
+    - The initial quality setting for the image compression.
+  - `minQuality`: number
+    - The minimum quality setting for the image compression.  
+  - `maxFileSize`: number
+    - The maximum file size in bytes for the compressed image.
+
+#### Server-side Returns
 
 - `Buffer`: The compressed image buffer.
 
