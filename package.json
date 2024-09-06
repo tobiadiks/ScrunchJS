@@ -1,6 +1,6 @@
 {
   "name": "scrunchjs",
-  "version": "2.0.0",
+  "version": "2.0.0-alpha.1",
   "description": "An extremely efficient image resizer",
   "main": "index.js",
   "scripts": {

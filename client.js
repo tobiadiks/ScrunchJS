@@ -15,28 +15,27 @@ const compressImageClient = async ({
   minQuality = 10,
   maxFileSize = 200 * 1024
 }) => {
+  // Create canvas and context only once
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+
   const compressImageHelper = (img, quality) => {
-    return new Promise((resolve) => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
+    // Calculate new dimensions
+    let width = img.width;
+    let height = img.height;
+    if (width > maxWidth) {
+      height *= maxWidth / width;
+      width = maxWidth;
+    }
 
-      // Calculate new dimensions
-      let width = img.width;
-      let height = img.height;
-      if (width > maxWidth) {
-        height *= maxWidth / width;
-        width = maxWidth;
-      }
+    canvas.width = width;
+    canvas.height = height;
 
-      canvas.width = width;
-      canvas.height = height;
+    // Draw image on canvas
+    ctx.drawImage(img, 0, 0, width, height);
 
-      // Draw image on canvas
-      ctx.drawImage(img, 0, 0, width, height);
-
-      // Convert to blob
-      canvas.toBlob(resolve, 'image/jpeg', quality);
-    });
+    // Convert to blob
+    return new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', quality));
   };
 
   // Load image
@@ -45,10 +44,19 @@ const compressImageClient = async ({
   let quality = initialQuality / 100;
   let compressedBlob = await compressImageHelper(img, quality);
 
-  // Gradually reduce quality until file size is acceptable or min quality is reached
-  while (compressedBlob.size > maxFileSize && quality > minQuality / 100) {
-    quality = Math.max(quality - 0.1, minQuality / 100);
+  // Binary search for optimal quality
+  let minQ = minQuality / 100;
+  let maxQ = quality;
+
+  while (compressedBlob.size > maxFileSize && maxQ - minQ > 0.01) {
+    quality = (minQ + maxQ) / 2;
     compressedBlob = await compressImageHelper(img, quality);
+    
+    if (compressedBlob.size > maxFileSize) {
+      maxQ = quality;
+    } else {
+      minQ = quality;
+    }
   }
 
   return compressedBlob;
