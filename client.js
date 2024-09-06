@@ -3,16 +3,16 @@
  * @param {Object} options - Compression options
  * @param {File|Blob} options.input - The image file or blob to compress
  * @param {number} [options.maxWidth=1920] - Maximum width of the compressed image
- * @param {number} [options.initialQuality=0.7] - Initial compression quality (0-1)
- * @param {number} [options.minQuality=0.1] - Minimum acceptable quality (0-1)
+ * @param {number} [options.initialQuality=70] - Initial compression quality (0-100)
+ * @param {number} [options.minQuality=10] - Minimum acceptable quality (0-100)
  * @param {number} [options.maxFileSize=200*1024] - Maximum file size in bytes (default 200KB)
  * @returns {Promise<Blob>} A promise that resolves with the compressed image blob
  */
 const compressImageClient = async ({
   input,
   maxWidth = 1920,
-  initialQuality = 0.7,
-  minQuality = 0.1,
+  initialQuality = 70,
+  minQuality = 10,
   maxFileSize = 200 * 1024
 }) => {
   const compressImageHelper = (img, quality) => {
@@ -47,7 +47,7 @@ const compressImageClient = async ({
 
   // Gradually reduce quality until file size is acceptable or min quality is reached
   while (compressedBlob.size > maxFileSize && quality > minQuality) {
-    quality = Math.max(quality - 0.1, minQuality);
+    quality = Math.max(quality - 10, minQuality);
     compressedBlob = await compressImageHelper(img, quality);
   }
 
