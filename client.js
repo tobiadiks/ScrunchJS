@@ -54,5 +54,5 @@ const compressImageClient = async ({
   return compressedBlob;
 };
 
-export default compressImageClient;
+module.exports = compressImageClient;
 

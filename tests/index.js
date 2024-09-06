@@ -3,6 +3,7 @@
 const fs = require('fs').promises;
 const compressImage = require('../index');
 
+
 async function test() {
   try {
     const inputBuffer = await fs.readFile('./tests/images/input.png');
