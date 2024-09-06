@@ -25,7 +25,7 @@ npm install scrunchjs --save
 ### Server-side Usage
 
 ```javascript
-const { compressImageServer } = require('scrunchjs');
+const compressImageServer = require('scrunchjs');
 
 const inputBuffer = await fs.readFile('./images/input.png');
 const compressedBuffer = await compressImageServer({
@@ -41,7 +41,7 @@ const compressedBuffer = await compressImageServer({
 
 ```javascript
 import React, { useState } from 'react';
-import { compressImageClient } from 'scrunchjs';
+import compressImageClient from 'scrunchjs';
 
 const ImageUploader = () => {
   const [image, setImage] = useState(null);
@@ -63,7 +63,9 @@ const ImageUploader = () => {
       maxFileSize: 200 * 1024
     });
 
-    setCompressedImage(compressedBuffer);
+    const compressedImage = new Image();
+    compressedImage.src = URL.createObjectURL(compressedBuffer);
+    setCompressedImage(compressedImage.src);
   };
 
   return (
@@ -74,6 +76,7 @@ const ImageUploader = () => {
     </div>
   );
 };
+
 ```
 
 ### Next.js Usage
@@ -83,7 +86,7 @@ Note: When using Next.js, you can create an API route to handle the image compre
 
 ```javascript
 import { NextResponse } from 'next/server';
-import { compressImageServer } from 'scrunchjs';
+import compressImageServer from 'scrunchjs';
 
 export async function POST(req, res) {
   if (req.method === 'POST') {
