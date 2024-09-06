@@ -24,7 +24,7 @@ npm install scrunchjs --save
 ### Node.js Usage
 
 ```javascript
-const { compressImage } = require('scrunchjs');
+const compressImage = require('scrunchjs');
 
 const inputBuffer = await fs.readFile('./images/input.png');
 const compressedBuffer = await compressImage({
@@ -40,7 +40,7 @@ const compressedBuffer = await compressImage({
 
 ```javascript
 import React, { useState } from 'react';
-import { compressImage } from 'scrunchjs';
+import compressImage from 'scrunchjs';
 
 const ImageUploader = () => {
   const [image, setImage] = useState(null);
@@ -81,10 +81,11 @@ When using ScrunchJs with Next.js, you need to create a server-side API route to
 
 1. Create an API route for image compression (e.g., `pages/api/compress-image.js` or `app/api/compress-image/route.js` for App Router):
 
-```
-import { compressImage } from 'scrunchjs';
+```javascript
+import { NextResponse } from 'next/server';
+import  compressImage  from 'scrunchjs';
 
-export default async function handler(req, res) {
+export async function POST(req, res) {
   if (req.method === 'POST') {
     try {
       const buffer = Buffer.from(await req.arrayBuffer());
@@ -96,13 +97,19 @@ export default async function handler(req, res) {
         maxFileSize: 200 * 1024
       });
 
-      res.status(200).send(compressedBuffer);
+      return new Response(compressedBuffer, {
+        status: 200,
+        headers: {
+          'Content-Type': 'image/png',
+          'Content-Length': compressedBuffer.length.toString(),
+        },
+      });
     } catch (error) {
       console.error(error);
-      res.status(500).send({ message: 'Error compressing image' });
+      return NextResponse.json({ message: 'Error compressing image' });
     }
   } else {
-    res.status(405).send({ message: 'Method not allowed' });
+    return NextResponse.json({ message: 'Method not allowed' });
   }
 };
 ```
@@ -125,7 +132,10 @@ const ImageUploader = () => {
     if (!image) return;
 
     try {
-      const response = await fetch('/api/compress-image', {
+      const response = await fetch('/api/image', {
+        headers: {
+          'Content-Type': 'image/png',
+        },  
         method: 'POST',
         body: image
       });
@@ -134,8 +144,10 @@ const ImageUploader = () => {
         throw new Error('Failed to compress image');
       }
 
-      const compressedBuffer = await response.arrayBuffer();
-      setCompressedImage(compressedBuffer);
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      setCompressedImage(url);
+
     } catch (error) {
       console.error(error);
       alert('Error compressing image');
